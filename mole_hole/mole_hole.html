@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+
+        let score = 0;
+        let isMoleCaptured = false;
+        function moleCaptured(){
+            isMoleCaptured = true;
+            let moleEl = document.getElementById("mole");
+            moleEl.classList.add("mole-captured")
+            score++;
+
+            document.getElementById("score-value").textContent = score;
+
+        }
+
+
+    function createHole(translate){
+            let g = document.createElementNS("http://www.w3.org/2000/svg","g");
+            g.innerHTML= `<ellipse class="hole__lip" cx="100" cy="202" rx="100" ry="25" fill="#C4C4C4"></ellipse>
+                <ellipse class="hole__hole" cx="100" cy="207" rx="95" ry="22" fill="#000"></ellipse>`;
+            g.setAttribute("transform",translate);
+            document.getElementById("hole-container").appendChild(g);
+            return g;
+        }
+
+         function startGame(seconds = 30){
+             score = 0;
+             document.getElementById("startButton").style.display = "none";
+
+
+            let positionStyle = [
+                "translate(0 -1)",
+                "translate(300 100)",
+            "translate(-300 150)",
+            "translate(600 300)",
+            "translate(-600 300)",
+            ]
+            for(let each of positionStyle){
+                createHole(each);
+            }
+            let colorSet = ["#cfcffc",
+                "#dea5bb",
+                "#8ea7c0",
+                "#f3e1d2"
+            ]
+            let moleEl = document.getElementById("mole");
+            let moleCapEl = document.getElementById("mole_cap");
+             document.getElementById("score-value").textContent = '0';
+             document.getElementById("timing-value").textContent ='0s'
+            let bottomLimit = 300;
+            let topLimit = 0;
+            let increment = -1;
+            let y = 300;
+            moleEl.setAttribute("transform",`translate(0 , ${y})`)
+            moleEl.style.display = "block"
+            let speed = Math.random()*4;
+            let timing = 0;
+            let interval  = setInterval(function (){
+                timing +=0.01;
+                document.getElementById("timing-value").textContent = Math.floor(timing)+"s";
+
+                if(timing>=seconds){
+                    clearInterval(interval);
+                    alert("Your score : "+score);
+                    document.getElementById("startButton").style.display = "block";
+                    moleEl.classList.remove("mole-captured");
+                    moleEl.style.display = "none";
+                    document.getElementById("hole-container").innerHTML = "";
+
+                    return;
+                }
+                if(isMoleCaptured){
+                    speed = -1.5;
+                }
+                y+=(increment*5 +increment*speed*2);
+                if(y<=topLimit){
+                   increment = 0;
+                   setTimeout(function (){ increment = 1;},300)
+                }
+                if(y>=bottomLimit){
+                    let nextHole = Math.floor(Math.random()*positionStyle.length)
+                    moleEl.parentElement.setAttribute("transform",positionStyle[nextHole])
+                    increment = increment*-1;
+                    speed = Math.random()*4;
+                    moleCapEl.style.color = colorSet[Math.floor(speed)]
+                    moleEl.classList.remove("mole-captured");
+                    isMoleCaptured = false;
+                    y=bottomLimit;
+
+                }
+                moleEl.setAttribute("transform",`translate(0 , ${y})`)
+
+            },10)
+
+        }
+    </script>
+    <meta charset="UTF-8">
+    <title>Mole & Hole</title>
+    <style >
+        *,
+        *:after,
+        *:before {
+            box-sizing: border-box;
+        }
+
+    .moon {
+        position: absolute;
+        margin: auto;
+        top: 90px;
+        left: 300px;
+        width: 100px;
+        height: 100px;
+        background-color: transparent;
+        border-radius: 50%;
+        box-shadow: 25px 10px 0px 0px rgb(243, 246, 229);
+    }
+        .toggle{
+            position: absolute;
+            right:5px;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+        }
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(#0f2424 0 52%, #19240f 50%);
+        }
+        .mole-in-hole {
+            width: 100vw;
+        }
+        .mole {
+            display: block;
+        }
+        .mole-head-crack{
+            display: none;
+        }
+        .mole.mole-captured .mole__cap{
+            display: none;
+        }
+        .mole.mole-captured .mole__eye{
+            transform: scaleY(0.2);
+        }
+        .mole.mole-captured .mole-head-crack{
+            display: block;
+        }
+        .cap__bandage{
+            fill: #d94426;
+        }
+        .mole__eye {
+            fill: #1a1a1a;
+        }
+        .mole__whiskers {
+            stroke: #1c1717;
+        }
+        .mole__body {
+            fill: #bfbfbf;
+        }
+        .mole__tummy,
+        .mole__muzzle {
+            fill: #f4f5f6;
+        }
+        .mole__chin {
+            fill: #abb5ba;
+        }
+        .mole__nose {
+            fill: #f8c8bf;
+        }
+        .cap__body {
+            fill: currentColor;
+        }
+        .cap__strap,
+        .cap__top,
+        .cap__peak {
+            fill: #d94426;
+        }
+        .hole__lip {
+            fill: #635036;
+        }
+
+        body.game-started .game-info{
+            display: none;
+        }
+        .toggle-iframe {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 80px; /* Adjust the width as needed */
+            height: 45px; /* Adjust the height as needed */
+            border: none;
+            background: transparent; 
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        <div class="moon"></div>
+           <div class="game-info layout-column" style="position: fixed;top:50px;left: 50px;padding: 20px; box-shadow: 0 0 1px 2px rgba(33,4,4,0.71)">
+            <div class="layout-row" style="color: white; font-size: 30px;font-weight: bold">
+                <span>Score : </span> <span id="score-value"> 0</span>
+            </div>
+            <div class="layout-row" style="color: white; font-size: 30px;font-weight: bold">
+                <span>Timing : </span> <span id="timing-value"> 0</span>
+            </div>
+        </div>
+
+        <div class="game-info layout-column" style="position: fixed;top:50%;left: 50%;transform: translate(-50%,-50%)">
+            <button  onclick="startGame()" id="startButton">Start Game</button>
+
+        </div>
+
+        <svg class="mole-in-hole" viewBox="-900 -300 2000 850" fill="none" xmlns="http://www.w3.org/2000/svg" id="svg">
+
+            <clipPath id="b" x="0" y="0" width="200" height="227">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M200 0H0v202c0 13.807 44.772 25 100 25s100-12.193 110-25V0z" fill="#C4C4C4"/>
+            </clipPath>
+            <mask id="c" mask-type="alpha" maskUnits="userSpaceOnUse" x="15" y="20" width="171" height="250">
+                <path d="M100.5 20c-46.944 0-85 38.056-85 85v165h170V105c0-46.944-38.056-85-85-85z" fill="#C4C4C4"/>
+            </mask>
+            <mask id="d" mask-type="alpha" maskUnits="userSpaceOnUse" x="60" y="95" width="81" height="50">
+                <ellipse cx="100.5" cy="120" rx="40" ry="25" fill="#F3ECEC"/>
+            </mask>
+            <mask id="e" mask-type="alpha" maskUnits="userSpaceOnUse" x="22" y="13" width="157" height="57">
+                <path d="M99.5 13C71 13 29 30.5 22 69.5h157c-5.5-43-51-56.5-79.5-56.5z" fill="#423F3F"/>
+            </mask>
+
+            <g>
+
+            </g>
+            <g id="hole-container"></g>
+
+
+            <g clip-path="url(#b)">
+                <g class="mole"  id="mole"  style="display:none" onclick="moleCaptured()">
+                    <path class="mole__body" d="M100.5 20c-46.944 0-85 38.056-85 85v165h170V105c0-46.944-38.056-85-85-85z" fill="#000"/>
+                    <g mask="url(#c)">
+                        <rect class="mole__tummy" x="45.5" y="164" width="110" height="123" rx="55" fill="#000"/>
+                    </g>
+                    <g class="mole-head-crack">
+                        <path class="cap__bandage" fill="#EF2E2E" d="M35 50 Q 102 -40 168 50  z"></path>
+                    </g>
+                    <g class="mole__face">
+                        <g mask="url(#d)">
+                            <ellipse class="mole__chin" cx="100.5" cy="120" rx="40" ry="25" fill="#E2E0E0"/>
+                            <ellipse class="mole__muzzle" cx="100.5" cy="116" rx="40" ry="25" fill="#F3ECEC"/>
+                        </g>
+                        <ellipse class="mole__nose" cx="100.5" cy="104" rx="10" ry="6" fill="#FFC6C6"/>
+                        <path class="mole__whiskers" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" d="m35.631 109.151 33.02 4.718m64.98 10.282 33.02 4.718m-98-7.738-33.02 4.718m131.02-14.718-33.02 4.718"/>
+                    </g>
+                    <g class="mole__eyes">
+                        <circle class="mole__eye" cx="53.5" cy="88" r="7" fill="#323232" style="transform-origin: 53.5px 88px"/>
+                        <circle class="mole__eye" cx="147.5" cy="88" r="7" fill="#323232" style="transform-origin: 147.5px 88px" />
+                    </g>
+                    <g class="mole__cap cap" id="mole_cap" style="color: #cfcffc">
+                        <ellipse class="cap__button" cx="100.5" cy="13.5" rx="6" ry="2.5" />
+                        <path class="cap__peak" d="M57 66.273C57 68.683 42.578 69 30.882 69 19.187 69 9 68.454 9 67.364 9 64.954 26.246 63 37.941 63 49.637 63 57 63.863 57 66.273z" fill="#EF2E2E"/>
+                        <path class="cap__strap" fill="#EF2E2E" d="M32 61h136v8H32z"/>
+                        <g mask="url(#e)">
+                            <path class="cap__body" d="M-10 13h220v57h-89.5V56.5H82V70h-92V13z" fill="#373737"/>
+                        </g>
+                    </g>
+
+
+                </g>
+            </g>
+        </svg>
+
+    </div>
+
+</body>
+</html>

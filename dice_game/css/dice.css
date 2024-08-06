@@ -1,0 +1,248 @@
+.container {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+}
+
+.dice {
+  text-align: center;
+  display: inline-block;
+
+}
+
+body {
+  background-color: #393E46;
+}
+
+h1 {
+  margin: 30px;
+  font-family: 'Lobster', cursive;
+  text-shadow: 5px 0 #232931;
+  font-size: 3rem;
+  color: #4ECCA3;
+}
+
+p {
+  font-size: 2rem;
+  color: #4ECCA3;
+  font-family: 'Indie Flower', cursive;
+}
+
+img {
+  width: 80%;
+}
+
+footer {
+  margin-top: 5%;
+  color: #EEEEEE;
+  text-align: center;
+  font-family: 'Indie Flower', cursive;
+
+}
+
+.dice-face{
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  background-color: #9c060c;
+  display: inline-block;
+  position: relative;
+
+}
+.dice-face > span{
+  position: absolute;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+  display: none;
+
+}
+.dice-face > span:nth-child(1){
+  left: 20%;
+  top: 20%;
+}
+.dice-face > span:nth-child(2){
+  left: 20%;
+  top: 50%;
+}
+
+.dice-face > span:nth-child(3){
+  left: 20%;
+  top: 80%;
+}
+
+
+
+.dice-face > span:nth-child(5){
+  left: 80%;
+  top: 20%;
+}
+.dice-face > span:nth-child(6){
+  left: 80%;
+  top: 50%;
+}
+
+.dice-face > span:nth-child(7){
+  left: 80%;
+  top: 80%;
+}
+
+
+.dice-face.value-1>span:nth-child(4){
+  display: block;
+}
+
+.dice-face.value-2>span:nth-child(3),.dice-face.value-2>span:nth-child(5){
+  display: block;
+}
+
+.dice-face.value-3>span:nth-child(3),.dice-face.value-3>span:nth-child(4),.dice-face.value-3>span:nth-child(5){                                                         
+  display: block;
+}
+
+.dice-face.value-4>span:nth-child(1),
+.dice-face.value-4>span:nth-child(3),
+.dice-face.value-4>span:nth-child(5),
+.dice-face.value-4>span:nth-child(7)
+{
+  display: block;
+}
+
+.dice-face.value-5>span:nth-child(1),
+.dice-face.value-5>span:nth-child(3),
+.dice-face.value-5>span:nth-child(4),
+.dice-face.value-5>span:nth-child(5),
+.dice-face.value-5>span:nth-child(7)
+{
+  display: block;
+}
+
+.dice-face.value-6>span:nth-child(1),
+.dice-face.value-6>span:nth-child(2),
+.dice-face.value-6>span:nth-child(3),
+.dice-face.value-6>span:nth-child(5),
+.dice-face.value-6>span:nth-child(6),
+.dice-face.value-6>span:nth-child(7)
+{
+  display: block;
+}
+
+.btn{
+  width: 90px;
+  height: 50px; 
+  justify-content: center;
+  margin-top: 20px;
+  font-family: cursive;
+  font-size: medium;
+  background-color: #4ecca3;
+  border-radius: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+
+
+
+
+.dice{
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transition: transform 0.3s;
+  transform-style: preserve-3d;
+}
+.dice.side-1{
+  transform: rotateX( 0deg ) rotateY( 0deg );
+}
+.dice.side-2{
+  transform: rotateX( 0deg ) rotateY( -90deg );
+
+}
+.dice.side-3{
+  transform: rotateX( 0deg ) rotateY( -180deg );
+}
+.dice.side-4{
+  transform: rotateX( 0deg ) rotateY( -270deg );
+
+}
+.dice.side-5{
+  transform: rotateX( -90deg ) rotateY( -360deg );
+}
+.dice.side-6{
+  transform: rotateX( -270deg ) rotateY( -360deg );
+
+}
+.dice-side{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+.dice-side.value-1{
+  transform: rotateY( 0deg );
+}
+.dice-side.value-2{
+  transform: rotateY( 90deg );
+}
+
+.dice-side.value-3{
+  transform: rotateY( 180deg ) ;
+}
+.dice-side.value-4{
+  transform: rotateY( 270deg ) ;
+}
+.dice-side.value-5{
+  transform: rotateX( 90deg ) ;
+}
+.dice-side.value-6{
+  transform: rotateX( 270deg )  ;
+}
+
+
+.scoreboard div {
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgb(1, 8, 15);
+  font-family: 'Lobster', cursive;
+  border-radius: 10px;
+  background-color: #806cbd00;
+}  
+
+.won-screen{
+  height: 100%;
+  width: 100%;
+  background-color: #4e5052cb;
+  font-size: 40px;
+  font-family: 'Lobster', cursive;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  position: fixed;
+  inset: 0 0 0 0;
+}
+
+.player-1-turm #player-1 circle{
+  stroke-width: 3px !important;
+  stroke: red !important;
+}
+
+.player-2-turm #player-2 circle{
+  stroke-width: 3px !important;
+  stroke: red !important;
+}

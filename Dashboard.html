@@ -1,0 +1,197 @@
+<html>
+<head>
+    <link href="./css/base/layout.css" rel="stylesheet">
+    <link href="./css/base/base.css" rel="stylesheet">
+    <script>
+
+
+       let fileMap = {
+                    snakeAndLadder         : { file : "./dice_game/snake_and_lader.html",     text : "Snake & Ladder",         description : "",      class : ""},
+                    chainReaction          : { file : "./chain_reaction/chainReaction.html",                text : "Chain Reaction",      description : "",      class : ""},
+                    ticTacToe              : { file : "./tic_tac_toe/TicTacToe.html",                    text : "TicTacToe",           description : "",      class : ""},
+                    moleHole               : { file : "./mole_hole/mole_hole.html",                    text : "Mole & Hole",         description : "",      class : ""},
+                }
+
+
+
+        window.onload = function(){
+            let pageHeading =  document.getElementById("pageHeading");
+            let dashboardContainer =  document.getElementById("pageDashboard");
+            let pages = Object.keys(fileMap);
+           let button = document.createElement("button");
+            button.setAttribute("class","topNavBtn");
+            button.setAttribute("id","page_home");
+            button.textContent = "Home";
+            button.addEventListener("click",function(){
+                loadContent()
+            })
+            pageHeading.appendChild(button)
+
+           for(let page of pages){
+            let pageDetail = fileMap[page];
+            let button = document.createElement("button");
+            button.setAttribute("class","topNavBtn");
+            button.setAttribute("id","page_"+page);
+            button.textContent = fileMap[page].text;
+            button.addEventListener("click",function(){
+                loadContent(page)
+            })
+            pageHeading.appendChild(button)
+
+
+            let cardDiv = document.createElement("div");
+            cardDiv.setAttribute("class","iframe-content flex-3")
+            cardDiv.innerHTML = "<h2>"+pageDetail.text+"</h2>"
+            cardDiv.addEventListener("click",function(){
+                loadContent(page)
+            })
+            dashboardContainer.append(cardDiv)
+            
+           }
+
+            if( window.location.hash){
+                loadContent( window.location.hash.substring(1))
+            }else{
+                loadContent()
+            }
+
+        }
+        let lastPage= null;
+        function loadContent(pageName) {
+            if(lastPage){
+                let oldButton = document.getElementById(lastPage);
+                oldButton.classList.remove("active");
+            }
+            if(!pageName){
+                document.body.classList.remove("game-view")
+                lastPage  = "page_home"
+                let button = document.getElementById(lastPage);
+                button.classList.add("active");
+                window.location.hash='';
+                return;
+            }
+            document.body.classList.add("game-view")
+
+            let url = fileMap[pageName].file
+            console.log(url)
+            document.getElementById('content-frame').src = url;
+            let button = document.getElementById("page_"+pageName);
+            button.classList.add("active");
+            window.location.hash=pageName;
+            lastPage = "page_"+pageName;
+            
+        }
+        </script>
+        
+        
+ <style >
+        
+        #app{
+            padding: 0 !important;
+        }
+        body,.page-container {
+            height: 100vh;
+            width: 100vw;
+            background-color: #21263D;
+            overflow: hidden;
+            margin: none;
+        }
+        .page-header { 
+            height: 70px;
+            display: flex;
+            left: 0;
+            right: 0;
+        }
+        .brand {
+            font-size: 40px;
+            font-family: cursive;
+            color: #dadae1;
+            line-height: 0.9;
+            margin: 20px 10px 5px 25px;
+        }
+        .topNavBtn {
+            height: 40px;
+            margin: 15px 10px 0px 10px;
+            color: #d7d0f3af;
+            padding: 10px;
+            cursor: pointer;
+            background-color : transparent;
+            border: none;
+            font-size: 14px;
+            line-height: 8px;
+            outline: none !important;
+        
+            width: max-content;
+        }
+        .topNavBtn.active{
+            border-bottom : 2px solid #515a87
+        }
+        
+        .page-area {
+            display: flex;
+            height: calc(100% - 70px);
+            width: 100%;
+            flex-grow: 10;
+            padding : 10px;
+        }
+        
+        .search-bar{
+            height: 30px;
+            border: 0.8px solid rgb(210, 204, 204);
+            border-radius: 20px;
+            background-color: transparent;
+            width: 100%;
+            color: #dadae1;
+            padding-left: 20px ;
+        }
+        
+        .divBorder{
+            border: 0.8px solid #d7d0f3af;
+            border-radius: 20px;
+        }
+        
+        .iframe-content{
+            margin: 20px;
+            min-width: 350px;
+            min-height: 300px;
+            background-color: #2A324D;
+            border-radius: 20px;
+        }
+
+        .game-holder{
+            display: none;
+        }
+
+        body.game-view .game-holder{
+            display: block;
+        }
+
+        body.game-view .dashboard-holder{
+            display: none;
+        }
+        
+        
+   </style>
+</head>
+<body> 
+    <div class="page-container">
+        <div class="page-header layout-row">
+           <div class="brand">GAMERZZZ</div>
+           <div  id="pageHeading" class="layout-row"></div>
+           <div class="flex-grow"></div>
+       </div>  
+       <div  class="page-area layout-column overflow-auto game-holder">
+        <iframe id="content-frame" src="memory_card.html" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+       </div>
+       <div class="page-area layout-column overflow-auto dashboard-holder" >
+
+        <input type="text" placeholder="search" class="search-bar layout-row">
+        <div class="flex-grow layout-wrap layout-row flex " style="padding:0px 20px 0px 20px;justify-content: center" id="pageDashboard">
+           
+            
+        </div>
+       </div>  
+   </div>
+</body>
+
+</html>

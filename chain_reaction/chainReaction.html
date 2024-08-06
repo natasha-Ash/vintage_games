@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/base/layout.css" rel="stylesheet">
+    <link href="./css/base/base.css" rel="stylesheet">
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(32, 30, 30);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+
+        }
+
+        .container {
+            /* width: 480px; */
+            display: grid;
+            /* grid-template-columns: repeat(8, 1fr); */
+            /* grid-template-rows: repeat(8, 1fr); */
+        }
+
+        .box {
+            width: 60px;
+            height: 60px;
+            border: 1px rgb(214, 212, 212) solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            position: absolute;
+            transition: 0.7s all;
+            
+        }
+        .ball.move-up{
+            transform: translateY(-60px);
+        }
+        .ball.move-down{
+            transform: translateY(60px);
+        }
+        .ball.move-left{
+            transform: translateX(-60px);
+        }
+        .ball.move-right{
+            transform: translateX(60px);
+        }
+        .ball-index-1:last-child{
+           left: 15px;
+           top: 15px;
+        }
+        .ball-index-1:not(:last-child){
+            top:10px;
+            right : 25px;
+
+
+        }
+        .ball-index-2{
+            top:10px;
+            left : 25px;
+        }
+        .ball-index-3{
+            bottom:10px;
+
+            right : 25px;
+
+        }
+
+        .ball-index-4{
+            left : 25px;
+            bottom:10px;
+
+        }
+
+
+
+        .red-ball {
+            background: linear-gradient(to right, #f34141 0%, #6c0505 100%);
+        }
+
+        .blue-ball {
+            background: linear-gradient(to right, #b555ed 0%, #442586 100%);
+        }
+        .rotate-box{
+            /* animation: rotate-box 2s infinite; */
+        }
+        @keyframes rotate-box{
+            0%{
+                transform: scaleX(1);
+            }
+            25%{
+                transform: scaleX(0.8);
+            }
+            50%{
+                transform: scaleX(0.7);
+            }
+            75%{
+                transform: scaleX(0.9);
+            }
+            100%{
+                transform: scaleX(1);
+            }
+
+        }
+        .red-ball-active-status,.blue-ball-active-status{
+            color: aqua;
+            opacity: 0.5;
+            font-weight: bold;
+        }
+
+        body.red-ball-turn .red-ball-active-status{
+            opacity: 1;
+        }
+        body.blue-ball-turn .blue-ball-active-status{
+            opacity: 1;
+        }
+        
+    </style>
+</head>
+<body>
+     
+     <div class="layout-row" style="margin: 10px 0;">
+        <div class="layout-row red-ball-active-status" style="justify-content: center;align-items: center;">
+            <span>Player 1:</span> <span class="ball red-ball" style="position: static;margin:0 10px ;"></span>
+        </div>
+        <div class="layout-row blue-ball-active-status" style="justify-content: center;align-items: center;">
+            <span>Player 2:</span> <span class="ball blue-ball"  style="position: static;margin:0 10px ;"></span>
+        </div>
+
+     </div>
+
+     <div class="container" id="container">
+    </div>
+     <script type="text/javascript">
+        let container = document.getElementById('container');
+        let isPlayerOneTurn = true;
+        let gridSize = 5;
+        let columns = gridSize;
+        let rows =gridSize;
+        let ballCount = [];
+        let ballColor = [];
+        let playerBall = 'red-ball' ;
+        let secondPlayerBall = 'blue-ball'; 
+        let moveCount = 0;
+
+
+        function setValue(i,j){
+            if(intervalTimer){
+                return;
+            }
+            let currentPlayerColour = isPlayerOneTurn ? playerBall : secondPlayerBall;
+            let anotherPlayerColour = isPlayerOneTurn ?  secondPlayerBall:playerBall;
+            if(ballColor[i][j]===anotherPlayerColour){
+                // alert("please choose another box")
+                return;
+            }
+
+            moveCount++;
+            addBallAt(i,j,currentPlayerColour)
+            
+            isPlayerOneTurn = !isPlayerOneTurn;
+            document.body.classList.remove((isPlayerOneTurn?secondPlayerBall:playerBall)+"-turn")
+            document.body.classList.add((isPlayerOneTurn?playerBall:secondPlayerBall)+"-turn")
+
+            
+                
+
+        }
+
+        function isMatchOver(val){
+            for (let i = 0; i < rows; i++) {
+           
+                for (let j = 0; j < columns; j++) {
+                    if(ballColor[i][j] !== val && ballColor[i][j]!==null){
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function addBallAt(i,j,val){
+        
+           
+
+            let box = document.querySelector('.position-'+i+'-'+j)
+            if( ballColor[i][j] !== val &&  ballCount[i][j] >0){
+                let existingBalls = box.querySelectorAll('.ball');
+                for(let each of existingBalls){
+                    each.classList.remove(ballColor[i][j])
+                    each.classList.add(val)
+                }
+
+            }
+            ballColor[i][j] = val;
+            ballCount[i][j]++;
+            let ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.classList.add(val);
+            ball.classList.add("ball-index-"+ballCount[i][j]);
+            box.appendChild(ball);
+
+            if(moveCount>2 && isMatchOver(val)){
+              
+                if(!intervalTimer ){
+                    return;
+                }
+                clearInterval(intervalTimer);
+                intervalTimer = null;
+                functionSet = [];
+            
+                setTimeout(function(){
+                    alert("Match over player :"+val+" won")
+                    resetFunction()
+                },100)
+
+                return;
+            }
+
+            if(!isFull(i,j,ballCount[i][j])){
+                return;
+            }
+            animateAction(function(){
+                ballColor[i][j] = null;
+                ballCount[i][j] =0;
+                let existingBalls = box.querySelectorAll('.ball');
+                let ballCounter = 0;
+                if(i>0){
+                    
+                    let removeBall = existingBalls[ballCounter];
+                    ballCounter ++;
+                    removeBall.classList.add("move-up");
+                    setTimeout(function(){
+                        removeBall.remove();
+                        addBallAt(i-1,j,val)
+                    },700)
+                
+                    
+                }
+                if(i<rows-1){
+                        let removeBall = existingBalls[ballCounter];
+                        ballCounter ++;
+                        removeBall.classList.add("move-down");
+                        setTimeout(function(){
+                            removeBall.remove();
+                            ballCounter ++;
+                            addBallAt(i+1,j,val)
+                        },700)
+                        
+                }
+                if(j>0){
+                        let removeBall = existingBalls[ballCounter];
+                        ballCounter ++;
+                        removeBall.classList.add("move-left");
+
+                        setTimeout(function(){
+
+                            removeBall.remove();
+                            ballCounter ++;
+                            addBallAt(i,j-1,val)
+                        },700)
+
+                }
+                if(j<columns-1){
+
+                        let removeBall = existingBalls[ballCounter];
+                        ballCounter ++;
+                        removeBall.classList.add("move-right");
+
+                        setTimeout(function(){
+                            removeBall.remove();
+                            ballCounter ++;
+                            addBallAt(i,j+1,val)
+                        },700)
+
+                    
+                }
+
+            })
+
+        }
+
+        let functionSet = [];
+        let intervalTimer ;
+        function animateAction(fun){
+            if(!intervalTimer){
+                intervalTimer = setInterval(function(){
+                    let call = functionSet[0];
+                    if(call){
+                        functionSet.splice(0,1);
+                        call();
+                    }
+                  
+                    if(!functionSet.length){
+                        clearInterval(intervalTimer);
+                        intervalTimer = null;
+                    }
+
+                },1000)
+                fun();
+            }else{
+                functionSet.push(fun);
+            }
+
+
+        }
+
+
+        function isFull(i,j,ballCount){
+            if(i==0 && j==0 || i==0 && j==columns-1 || i==rows-1 && j==0|| i==rows-1 && j==columns-1){
+                return ballCount>1;
+            }
+
+            if(i==0 || j==0 ||  j==columns-1 || i==rows-1){
+                return ballCount>2;
+            }
+            return ballCount>3;
+        }
+
+        function startGame(n=8){
+            gridSize = n;
+            columns = gridSize;
+            rows =gridSize;
+            container.style.width = (columns*60)+"px";
+            container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            moveCount = 0;
+            container.innerHTML = "";
+            document.body.classList.remove((isPlayerOneTurn?secondPlayerBall:playerBall)+"-turn")
+            document.body.classList.add((isPlayerOneTurn?playerBall:secondPlayerBall)+"-turn")
+            for (let i = 0; i < rows; i++) {
+            ballCount[i] = [];
+            ballColor[i] = [];
+            for (let j = 0; j < columns; j++) {
+                let box = document.createElement('div');
+                ballCount[i][j] = 0;
+                ballColor[i][j] = null;
+                box.classList.add('box');
+                let innerBox = document.createElement("span")
+                box.appendChild(innerBox)
+                innerBox.classList.add("rotate-box")
+                innerBox.classList.add('position-'+i+'-'+j);
+                box.addEventListener('click', () => {
+                        setValue(i,j);
+                    });
+
+                container.appendChild(box);
+            }
+        }
+        }
+        window.onload=function(){
+            resetFunction();
+        }
+        function resetFunction(){
+            let input = document.createElement("input");
+            container.style.gridTemplateColumns = `none`;
+            container.style.gridTemplateRows = `none`;
+            container.innerHTML ="<span style='color:white'>Enter the Grid size</span>" 
+            container.appendChild(input);
+            input.focus();
+            input.addEventListener("keyup",function(e){
+                if (e.keyCode !== 13) {
+                   return;
+                }
+                let grids =input.value;
+                grids = parseInt(grids);
+                if(!isNaN(grids)){
+                    startGame(grids);
+                    return 
+                }
+                input.value = ""
+            })
+           
+
+        }
+       
+    </script>
+</body>
+</html>

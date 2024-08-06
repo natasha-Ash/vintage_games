@@ -1,0 +1,85 @@
+.svgContainer{
+    height: 100%;
+    margin-left: 40px;
+}
+.svgContainer #board>rect:nth-child(4n+1){
+    fill: #4089ff;
+
+}
+.svgContainer #board>text:nth-child(4n){
+    fill: #4089ff;
+}
+
+.svgContainer #board>text:nth-child(4n-2){
+    fill: #ffffff;
+}
+
+.svgContainer #board>rect:nth-child(4n-1){
+    fill: white;
+
+}
+.svgContainer #board>rect{
+    stroke: #888;
+}
+
+.snake-animate{
+    animation: shake .5s ease-in;
+}
+.ladder-animate{
+    animation: shake-ladder .5s ease-out;
+}
+
+@keyframes shake {
+    20%{
+        transform: rotate(-2deg);
+    }
+    40%{
+        transform: rotate(0deg);
+    }
+    60%{
+        transform: rotate(2deg);
+    }
+    80%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(2deg);
+    }
+}
+
+@keyframes shake-ladder {
+    20%{
+        transform: rotate(-6deg);
+    }
+    40%{
+        transform: rotate(0deg);
+    }
+    60%{
+        transform: rotate(4deg);
+    }
+    80%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(2deg);
+    }
+}
+
+
+@keyframes grow {
+    20%{
+        transform: scale(0.1);
+    }
+    40%{
+        transform: rotate(0.3);
+    }
+    60%{
+        transform: rotate(0.5);
+    }
+    80%{
+        transform: rotate(0.7);
+    }
+    100%{
+        transform: rotate(0.9);
+    }
+}

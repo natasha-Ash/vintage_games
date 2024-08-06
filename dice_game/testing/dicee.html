@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dicee</title>
+    <link rel="stylesheet" href="../css/dice.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Indie+Flower|Lobster"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Roll</h1>
+
+      <div class="dice">
+        <p>Player 1</p>
+        <div class="dice-face p-1">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="dice">
+        <p>Player 2</p>
+        <div class="dice-face p-2">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+            </div>
+
+              <button class="btn" >Start</button>
+
+     
+    </div>
+
+    <footer>www 🎲 App Brewery 🎲 com</footer>
+    <script>
+      let img1 = document.querySelector(".p-1");
+      let img2 = document.querySelector(".p-2");
+      let btn = document.querySelector(".btn");
+      let randNum1 = 0;
+      let randNum2 =0;
+      btn.onclick=()=>{
+        img1.classList.remove("value-"+randNum1);
+        img2.classList.remove("value-"+randNum2);
+        randNum1 = Math.floor(Math.random()*6+1);
+        randNum2 = Math.floor(Math.random()*6+1);
+        setTimeout(() => {
+        img1.classList.add("value-" + randNum1);
+        img2.classList.add("value-" + randNum2);
+      }, 100);
+
+ 
+
+      }
+
+    </script>
+  </body>
+</html>

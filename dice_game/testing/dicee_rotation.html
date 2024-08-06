@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dicee</title>
+    <link rel="stylesheet" href="../css/dice.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Indie+Flower|Lobster"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Refresh Me</h1>
+
+      <div class="dice  p-1">
+
+        <div class="dice-side value-1">
+
+          <div class="dice-face value-1">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dice-side value-2">
+
+          <div class="dice-face value-2">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dice-side value-3">
+
+          <div class="dice-face value-3">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dice-side value-4">
+          <div class="dice-face value-4">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dice-side value-5">
+          <div class="dice-face value-5">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="dice-side value-6">
+          <div class="dice-face value-6">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+
+      <button class="btn1 btn" >Next</button>
+
+     
+    </div>
+
+    <footer>www 🎲 App Brewery 🎲 com</footer>
+    <script >
+      let img1 = document.querySelector(".p-1");
+let btn = document.querySelector(".btn1");
+let randNum1 = 1;
+btn.onclick=()=>{
+  img1.classList.remove("side-"+randNum1);
+  randNum1 = Math.floor(Math.random()*6+1);
+  // randNum1 =(randNum1)%6+1;
+  setTimeout(() => {
+  img1.classList.add("side-" + randNum1);
+}, 300);
+}
+
+
+    </script>
+
+  
+  </body>
+
+  <style>
+    .dice{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      transition: transform 0.3s;
+      transform-style: preserve-3d;
+    }
+    .dice.side-1{
+      transform: rotateX( 0deg ) rotateY( 0deg );
+    }
+    .dice.side-2{
+      transform: rotateX( 0deg ) rotateY( -90deg );
+
+    }
+    .dice.side-3{
+      transform: rotateX( 0deg ) rotateY( -180deg );
+    }
+    .dice.side-4{
+      transform: rotateX( 0deg ) rotateY( -270deg );
+
+    }
+    .dice.side-5{
+      transform: rotateX( -90deg ) rotateY( -360deg );
+    }
+    .dice.side-6{
+      transform: rotateX( -270deg ) rotateY( -360deg );
+
+    }
+    .dice-side{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+    }
+    .dice-side.value-1{
+      transform: rotateY( 0deg );
+    }
+    .dice-side.value-2{
+      transform: rotateY( 90deg );
+    }
+
+    .dice-side.value-3{
+      transform: rotateY( 180deg ) ;
+    }
+    .dice-side.value-4{
+      transform: rotateY( 270deg ) ;
+    }
+    .dice-side.value-5{
+      transform: rotateX( 90deg ) ;
+    }
+    .dice-side.value-6{
+      transform: rotateX( 270deg )  ;
+    }
+  </style>
+</html>

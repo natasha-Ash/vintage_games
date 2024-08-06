@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<script src="./tictactoe.js"></script>
+  <script type="text/javascript">
+  let currentGame = null;
+  let isMatchOver = false;
+  let botCount = parseInt(window.localStorage.botCount) || 0;
+  let playerCount = parseInt( window.localStorage.playerCount) || 0;
+  let tiedCount = parseInt(window.localStorage.tiedCount) || 0;
+  let playerVal = parseInt(window.sessionStorage.playerVal) || 1;
+  let botVal =  parseInt(window.sessionStorage.botVal) || 2;
+  window.onload = function (){
+	  if(window.sessionStorage.boardState){
+				currentGame = new TicTacToe(window.sessionStorage.boardState);
+			 fillBoard(currentGame)
+	  }
+	  updateScore();
+	  updateSymbol();
+  }
+ 
+  function play(row,col){
+	 if(!currentGame){
+		 clearGame();
+	 }
+	  let messageElement = document.querySelector("#matchStatus")
+	 if(!currentGame.isAvailable(row, col)){
+		 let message = "The place is already filled. please try again"
+		 messageElement.textContent = message;
+		 alert(message)
+		 return ;
+	 }
+	 currentGame.insert(row,col,playerVal);
+	let status = currentGame.play(botVal);
+	 if(status){
+		 isMatchOver = true;
+		 if(status.winner ===0){
+			 tiedCount++;
+			 window.localStorage.tiedCount = tiedCount;
+		 }
+		 if(status.winner ===playerVal){
+			 playerCount++;
+			 window.localStorage.playerCount = playerCount;
+		 }
+		 if(status.winner ===botVal){
+			 botCount++;
+			 window.localStorage.botCount = botCount;
+		 }
+		 updateScore();
+			fillBoard(currentGame,status.matchSet)
+		  messageElement.textContent = status.text;
+			  delete window.sessionStorage.boardState;
+			  document.getElementById("overlay").style.display="block";
+	  }else{
+			fillBoard(currentGame)
+
+		  messageElement.textContent = "";
+	  }
+  }
+  function updateScore(){
+	  document.getElementById("tiedCount").textContent = tiedCount;
+	  document.getElementById("playerWonCount").textContent = playerCount;
+	  document.getElementById("botWonCount").textContent = botCount;
+  }
+  function clearUpdatedScore(){
+	  	window.localStorage.playerCount = playerCount = 0;
+	  	window.localStorage.botCount = botCount = 0;
+	  	window.localStorage.tiedCount = tiedCount = 0;
+	  	updateScore();
+  }
+  function updateSymbol(){
+	  document.getElementById("botSymbol").textContent = botVal===1?'O':'X';
+		 document.getElementById("playerSymbol").textContent = playerVal===1?'O':'X';
+  }
+  
+  function clearGame(){
+	  document.getElementById("overlay").style.display="none";
+
+	  delete window.sessionStorage.boardState;
+	  let messageElement = document.querySelector("#matchStatus")
+	  	if(isMatchOver){
+	  		let temp =  playerVal;
+	  		playerVal = botVal;
+	  		botVal = temp;
+	  	}
+	  isMatchOver = false;
+	  	window.sessionStorage.playerVal = playerVal;
+	  	window.sessionStorage.botVal = botVal;
+		 currentGame = new TicTacToe();
+		 updateSymbol();
+		 if(botVal ===1){
+			 currentGame.play(botVal);
+		 }
+		  fillBoard(currentGame)
+		  messageElement.textContent = "";
+  }
+  
+ 
+  
+  
+  function fillBoard(game,status){
+		console.log(currentGame.toString())
+		window.sessionStorage.boardState = currentGame.toString();
+	  let elementRows = document.querySelectorAll(".TicTacToe>.play-ground>.row")
+	  for(let i=0;i<3;i++){
+		  let row = game.array[i];
+		  let buttons = elementRows[i].querySelectorAll("button");
+		  for(let j=0;j<3;j++){
+			  if(status && status.indexOf(i*3+j)!==-1){
+//			  buttons[j].style.color="red"
+			  buttons[j].setAttribute("style","color:red");
+
+			  }else{
+				  buttons[j].style.color="white"
+			  }
+			  if(row[j]==1){
+				  buttons[j].textContent = "O";
+			  }
+			  else if(row[j]==2){
+				  buttons[j].textContent = "X";
+			  }else{
+				  buttons[j].textContent = " ";
+ 
+			  }
+			  
+		  }
+	  }
+  }
+  
+</script>
+<body>
+<div class="toolbar">
+<button onclick="clearGame()">Clear</button>
+<div class="counter-container">
+	<div class="count-row">
+		<span class="count-name">Player won</span> : 
+		<span id="playerWonCount" class="count-value">0</span>
+	</div>
+	<div class="count-row">
+		<span class="count-name">Bot won</span> : 
+		<span id="botWonCount" class="count-value">0</span>
+	</div>
+	<div class="count-row">
+		<span class="count-name">Tied</span> : 
+		<span id="tiedCount" class="count-value">0</span>
+	</div>
+	<button onclick="clearUpdatedScore()" > Clear</button>
+</div>
+
+<div class="counter-container player-symbol">
+	<div class="count-row">
+		<span class="count-name">Player</span> : 
+		<span id="playerSymbol" class="count-value">O</span>
+	</div>
+	<div class="count-row">
+		<span class="count-name">Bot</span> : 
+		<span id="botSymbol" class="count-value">X</span>
+	</div>
+	
+</div>
+
+<div class="message-container" id="matchStatus"></div>
+</div>
+<div class = "TicTacToe">
+	<div class='tic-over-lay' id="overlay" onclick="clearGame()"> Restart</div>
+	<div class="play-ground">
+		<div class = "row first-row">
+		<button onclick="play(0,0)"></button>
+		<button onclick="play(0,1)"></button>
+		<button onclick="play(0,2)"> </button>
+		</div>
+		<div class = "row second-row">
+		<button onclick="play(1,0)"></button>
+		<button onclick="play(1,1)"></button>
+		<button onclick="play(1,2)"></button>
+		</div>
+		<div class = "row third-row">
+		<button onclick="play(2,0)"></button>
+		<button onclick="play(2,1)"></button>
+		<button onclick="play(2,2)"> </button>
+		</div>
+	</div>
+</div>
+</body>
+<style>
+.counter-container.player-symbol{
+	right :30px;
+	left : auto;
+
+}
+.counter-container{
+	position : fixed;
+	top :10px;
+	left : 30px;
+	color: white;
+	padding:20px;
+	border: 1px solid #444444;
+}
+
+.count-name{
+	min-width: 100px;
+    display: inline-block;
+    color: #8867c2;
+    font-size: 20px;
+}
+body{
+	background: black;
+
+}
+.TicTacToe{
+	background: #230951;
+	color:white;
+	position : relative;
+}
+.tic-over-lay{
+	display:none;
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #682b2b73;
+    text-align: center;
+    line-height: 400px;
+    font-size: 50px;
+    cursor:pointer;
+}
+.TicTacToe>.play-ground>div.row>button{
+    display: flex;
+    width: 30%;
+    background: transparent;
+font-size:32px;
+    font-weight:bold;
+    color:white;
+        height: 65px;
+    
+    border-color: white;
+    border-style: solid;
+    min-width: 90px;
+    min-height: 90px;
+    max-width: 90px;
+    max-height: 90px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer;
+}
+.TicTacToe>.play-ground>div.row>button:hover{
+    background: #331961;
+
+}
+.TicTacToe>.play-ground{
+		flex : 10 0 auto;
+ 	    display: flex;
+ 	    flex-direction:column;
+        box-sizing: border-box;
+             align-items: center;
+    justify-content: center;
+        
+
+}
+ .TicTacToe>.play-ground>div.row{
+ 	    display: flex;
+ 
+        box-sizing: border-box;
+    
+    
+    }
+.first-row button{
+
+    border-width: 0px 3px 3px 0px;
+
+}
+.TicTacToe>.play-ground>div.row>button:last-child{
+	border-right : none ;
+}
+.second-row button{
+   
+    border-width: 0px 3px 3px 0px;
+
+}
+.third-row button{
+    border-width: 0px 3px 0px 0px;
+
+}
+.toolbar{
+display: flex;
+        box-sizing: border-box;
+             align-items: center;
+    justify-content: center;
+    min-height:100px;
+}
+.message-container{
+display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    min-height:100px;
+    font-size:16px;
+    font-weight:bold;
+    color:red;
+
+}
+.TicTacToe {
+	
+    width: 400px;
+    margin: auto;
+    height: 400px;
+ display: flex;
+        box-sizing: border-box;
+             align-items: center;
+    justify-content: center;
+box-shadow: 0 0 4px 4px #5e458acc;
+        }
+   
+</style>
+</html>
