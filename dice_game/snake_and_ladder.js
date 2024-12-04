@@ -84,6 +84,11 @@ function startGame(){
    
 }
 
+function restart(){
+    let restart = document.getElementsByClassName(".restart-btn");
+    window.addEventListener()
+}
+
 
 
 

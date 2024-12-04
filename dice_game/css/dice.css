@@ -238,11 +238,11 @@ footer {
 }
 
 .player-1-turm #player-1 circle{
-  stroke-width: 3px !important;
-  stroke: red !important;
+  stroke-width: 6px !important;
+  stroke: rgb(248, 211, 211) !important;
 }
 
 .player-2-turm #player-2 circle{
-  stroke-width: 3px !important;
-  stroke: red !important;
+  stroke-width: 6px !important;
+  stroke: rgb(247, 215, 215) !important;
 }
