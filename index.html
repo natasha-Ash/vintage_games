@@ -6,12 +6,11 @@
 
 
        let fileMap = {
-                    snakeAndLadder         : { file : "./dice_game/snake_and_lader.html",     text : "Snake & Ladder",         description : "",      class : ""},
-                    chainReaction          : { file : "./chain_reaction/chainReaction.html",                text : "Chain Reaction",      description : "",      class : ""},
-                    ticTacToe              : { file : "./tic_tac_toe/TicTacToe.html",                    text : "TicTacToe",           description : "",      class : ""},
-                    moleHole               : { file : "./mole_hole/mole_hole.html",                    text : "Mole & Hole",         description : "",      class : ""},
+                    snakeAndLadder         : { file : "./dice_game/snake_and_lader.html",    img:"./images/snakeAndLadder.png",     text : "Snake & Ladder",      description : "",      class : ""},
+                    chainReaction          : { file : "./chain_reaction/chainReaction.html", img:"./images/chain_reaction.png",     text : "Chain Reaction",      description : "",      class : ""},
+                    ticTacToe              : { file : "./tic_tac_toe/TicTacToe.html",        img:"./images/Tictactoe.png",          text : "TicTacToe",           description : "",      class : ""},
+                    moleHole               : { file : "./mole_hole/mole_hole.html",          img:"./images/whack_the_mole.png",     text : "Mole & Hole",         description : "",      class : ""},
                 }
-
 
 
         window.onload = function(){
@@ -24,7 +23,7 @@
             button.textContent = "Home";
             button.addEventListener("click",function(){
                 loadContent()
-            })
+            })  
             pageHeading.appendChild(button)
 
            for(let page of pages){
@@ -40,8 +39,24 @@
 
 
             let cardDiv = document.createElement("div");
-            cardDiv.setAttribute("class","iframe-content flex-3")
-            cardDiv.innerHTML = "<h2>"+pageDetail.text+"</h2>"
+            cardDiv.setAttribute("class","iframe-content flex-3");
+
+            let img = document.createElement("img");
+            img.src = pageDetail.img;
+            img.alt = pageDetail.text;
+            img.style.width = "100%"; 
+            img.style.borderRadius = "10px";
+            img.style.objectFit = "cover";
+            img.style.overflow = "hidden";
+            cardDiv.appendChild(img);
+
+            console.log('Image source:', img.src);
+
+            // cardDiv.innerHTML = "<h2>"+pageDetail.text+"</h2>"
+            let header = document.createElement("h2");
+            header.textContent = pageDetail.text;
+            cardDiv.appendChild(header);
+
             cardDiv.addEventListener("click",function(){
                 loadContent(page)
             })
